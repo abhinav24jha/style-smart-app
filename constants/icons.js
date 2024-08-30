@@ -12,7 +12,7 @@ import thumbs_down from "../assets/icons/thumbs_down.png";
 import thumbs_up from "../assets/icons/thumbs_up.png";
 import trending_up from "../assets/icons/trending_up.png";
 import wind from "../assets/icons/wind.png";
-
+import squiggly_line from "../assets/icons/squiggly_line.png"
 
 export default {
   again,
@@ -29,4 +29,5 @@ export default {
   thumbs_up,
   trending_up,
   wind,
+  squiggly_line,
 };

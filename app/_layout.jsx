@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 import React, { useEffect } from "react";
-import { SplashScreen} from "expo-router";
+import { SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -30,11 +30,10 @@ const RootLayout = () => {
 
 
   return (
-    <View>
-      <Text>
-        RootLayout
-      </Text>
-    </View>
+    <Stack>
+      <Stack.Screen name="index" options={{headerShown: false}}/>
+      <Stack.Screen name="(home)" options={{headerShown: false}}/>
+    </Stack>
   )
 }
 
