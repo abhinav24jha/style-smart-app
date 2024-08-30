@@ -13,6 +13,8 @@ import thumbs_up from "../assets/icons/thumbs_up.png";
 import trending_up from "../assets/icons/trending_up.png";
 import wind from "../assets/icons/wind.png";
 import squiggly_line from "../assets/icons/squiggly_line.png"
+import clothes from "../assets/icons/clothes.png"
+import history from "../assets/icons/history.png"
 
 export default {
   again,
@@ -30,4 +32,6 @@ export default {
   trending_up,
   wind,
   squiggly_line,
+  clothes,
+  history,
 };

@@ -3,7 +3,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import React from 'react'
 import { icons, images } from '../constants'
 import CustomButton from "../components/CustomButton";
-import { Redirect, router } from "expo-router";
+import { Redirect, router, Link } from "expo-router";
 
 const index = () => {
   return (
@@ -50,8 +50,10 @@ const index = () => {
             title="Get Started"
             containerStyles="bg-red_one rounded-[30px] h-[52px] w-[220px] justify-center items-center absolute left-[173px] top-[765px]"
             textStyles="font-b_bold text-[24px] text-bg_color"
-            handlePress={() => router.push('./home.jsx')}
+            handlePress={() => router.push('/style-smart/app/(all_screens)')}
           />
+
+          <Link href={"/home"}>Home</Link>
 
 
         </View>
