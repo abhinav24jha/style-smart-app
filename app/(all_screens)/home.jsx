@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { Avatar } from '@rneui/themed';
 import { styled } from 'nativewind';
 import { images } from "../../constants"
 import { icons } from "../../constants"
@@ -14,23 +13,32 @@ const Home = () => {
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchWeather = async () => {
-      try {
-        const weatherData = await getWeatherData('Waterloo, CA');
-        setWeather(weatherData);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error loading weather data:', error);
-        setLoading(false);
-      }
-    };
+  // Function to fetch weather data
+  const fetchWeather = async () => {
+    try {
+      const weatherData = await getWeatherData('Waterloo, CA'); // Fetch weather for specified location
+      setWeather(weatherData);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error loading weather data:', error);
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
+    // Fetch initial weather data
     fetchWeather();
+
+    // Set up polling interval to update weather data every 10 minutes (600000 milliseconds)
+    const intervalId = setInterval(fetchWeather, 600000); 
+
+    // Clean up interval on component unmount 
+    return () => clearInterval(intervalId);
   }, []);
 
+
   if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
+    return <ActivityIndicator size="large" color="#2222d7" />;
   }
 
   if (!weather) {
@@ -41,29 +49,9 @@ const Home = () => {
 
   return (
     <ScrollView className="flex-1 p-4 bg-bg_color">
-      {/* Header */}
-      <View className="flex-row justify-between items-center mb-5 mt-12">
-        <View className="flex-row items-center space-x-3 pl-4">
-          <Avatar
-            rounded
-            source={images.profile_picture}
-            size="medium"
-          />
-          <View>
-            <Text className="text-text_color font-b_regular text-[13px]">Welcome back</Text>
-            <Text className="text-[20px] font-b_bold mt-[-4]">Abhinav</Text>
-          </View>
-        </View>
-        <StyledButton className="p-4">
-          <Image
-            source={icons.menu}
-            className=""
-          />
-        </StyledButton>
-      </View>
 
-      {/* Weather Card */}
-      <View className="bg-red_one rounded-xl p-4 mb-4">
+      {/* Weather */}
+      <View className="bg-red_one rounded-xl p-4 mb-4 mt-[-15px]">
 
         <View className="flex-row justify-between items-start mb-2">
           <Text className="text-[22px] font-bold text-white">
@@ -103,7 +91,7 @@ const Home = () => {
       </View>
 
       {/* Outfit Recommendation */}
-      <View className="bg-[#F7F8EF] rounded-[10px] p-4 shadow-2xl w-[386px] h-[421px]">
+      <View className="bg-[#F7F8EF] rounded-[10px] p-4 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] w-[386px] h-[421px]">
         <Text className="text-[22px] font-bold mb-4">Today's Outfit Recommendation</Text>
         <View className="flex-row justify-between mb-4">
           <View className="bg-[#6F4A4A] rounded-[10px] w-[164px] h-[190px] mt-[10px]">

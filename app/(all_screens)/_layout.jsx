@@ -1,18 +1,12 @@
-import { View, Text, Image} from 'react-native'
-import React from 'react'
+import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native'
+import React, { useState } from 'react'
 import { Tabs, Redirect } from 'expo-router'
+import { images } from "../../constants"
+import { styled } from 'nativewind';
 import { icons } from "../../constants";
 
 const TabIcon = ({ icon, color, focused }) => {
   return (
-    // <View className="flex-1 items-center justify-center pt-6">
-    //   <Image
-    //     source={icon}
-    //     resizeMode="contain"
-    //     tintColor={color}
-    //     className="w-[24px] h-[24px] pb-10"
-    //   />
-    // </View>
 
   <View
   className={`flex justify-center items-center rounded-full pt-12 `}
@@ -31,10 +25,36 @@ const TabIcon = ({ icon, color, focused }) => {
   );
 };
 
+const StyledButton = styled(TouchableOpacity);
+
 const AllScreens = () => {
+
+  const [showMenu, setShowMenu] = useState(false)
+
 
   return (
     <>
+      <View className='bg-bg_color'>
+        <View className="flex-row justify-between items-center mb-5 mt-16">
+            
+            <View className="flex-row items-center space-x-3 pl-4">
+              <Image
+                source={images.profile_picture}
+              />
+              <View>
+                <Text className="text-text_color font-b_regular text-[13px]">Welcome back</Text>
+                <Text className="text-[20px] font-b_bold mt-[-4]">Abhinav</Text>
+              </View>
+            </View>
+            <StyledButton className="p-4">
+              <Image
+                source={icons.menu}
+                className=""
+              />
+            </StyledButton>
+          </View>
+      </View>
+
       <Tabs
          screenOptions={{
           headerShown: false,

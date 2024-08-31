@@ -11,13 +11,15 @@ export const getWeatherData = async (location) => {
       }
 
       const data = await response.json();
+
       return {
-        temperature: data.main.temp,
+        temperature: data.main.temp.toFixed(1),
         windSpeed: data.wind.speed.toFixed(1),
         highTemp: data.main.temp_max.toFixed(1),
         lowTemp: data.main.temp_min.toFixed(1),
         weatherCondition: data.weather[0].main,
       };
+
     } catch (error) {
       console.error('Error fetching weather data:', error);
       throw error;

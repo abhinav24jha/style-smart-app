@@ -50,11 +50,8 @@ const index = () => {
             title="Get Started"
             containerStyles="bg-red_one rounded-[30px] h-[52px] w-[220px] justify-center items-center absolute left-[173px] top-[765px]"
             textStyles="font-b_bold text-[24px] text-bg_color"
-            handlePress={() => router.push('/style-smart/app/(all_screens)')}
+            handlePress={() => router.push('/(all_screens)/home')}
           />
-
-          <Link href={"/home"}>Home</Link>
-
 
         </View>
       </ScrollView>
