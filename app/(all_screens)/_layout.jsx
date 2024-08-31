@@ -37,6 +37,7 @@ const AllScreens = () => {
     <>
       <Tabs
          screenOptions={{
+          headerShown: false,
           tabBarActiveTintColor: "#fefff5",
           tabBarInactiveTintColor: "#fefff5",
           tabBarShowLabel: false,
