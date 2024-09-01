@@ -1,9 +1,10 @@
 import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useState } from 'react'
-import { Tabs, Redirect } from 'expo-router'
+import { Tabs, Redirect, router } from 'expo-router'
 import { images } from "../../constants"
 import { styled } from 'nativewind';
 import { icons } from "../../constants";
+import Menu from '../../components/Menu';
 
 const TabIcon = ({ icon, color, focused }) => {
   return (
@@ -31,6 +32,12 @@ const AllScreens = () => {
 
   const [showMenu, setShowMenu] = useState(false)
 
+  // Function to handle navigation from the menu
+  const navigateTo = (screen) => {
+    setShowMenu(false)
+    router.push(`/${screen}`)
+  };
+
 
   return (
     <>
@@ -46,7 +53,7 @@ const AllScreens = () => {
                 <Text className="text-[20px] font-b_bold mt-[-4]">Abhinav</Text>
               </View>
             </View>
-            <StyledButton className="p-4">
+            <StyledButton className="p-4" onPress={() => setShowMenu(!showMenu)}>
               <Image
                 source={icons.menu}
                 className=""
@@ -95,22 +102,6 @@ const AllScreens = () => {
         />
 
         <Tabs.Screen 
-          name='schedule'
-          options={{
-            title: "ScheduleIntegration",
-            headerShown: false,
-            tabBarIcon: ({ color, focused }) => (
-              <TabIcon
-                icon={icons.calendar}
-                color={color}
-                name="Calendar"
-                focused={focused}
-              />
-            ),
-          }}
-        /> 
-
-        <Tabs.Screen 
           name='wardrobe'
           options={{
             title: "Wardrobe",
@@ -120,6 +111,22 @@ const AllScreens = () => {
                 icon={icons.clothes}
                 color={color}
                 name="Wardrobe"
+                focused={focused}
+              />
+            ),
+          }}
+        /> 
+
+        <Tabs.Screen 
+          name='schedule'
+          options={{
+            title: "ScheduleIntegration",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon
+                icon={icons.calendar}
+                color={color}
+                name="Calendar"
                 focused={focused}
               />
             ),
@@ -144,6 +151,8 @@ const AllScreens = () => {
 
 
       </Tabs>
+
+      <Menu isVisible={showMenu} onClose={() => setShowMenu(!showMenu)} navigateTo={navigateTo} />
     </>
   )
 }
