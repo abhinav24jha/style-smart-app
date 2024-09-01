@@ -30,25 +30,55 @@ export default function Wardrobe() {
 
   const handleAddNewItem = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
+  
     if (!permissionResult.granted) {
       Alert.alert('Permission Denied', 'Permission to access the gallery is required!');
       return;
     }
-
-    // Launch image picker with multiple selection enabled
+  
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsMultipleSelection: true, // Enable multiple selection
+      allowsMultipleSelection: true,
       quality: 1,
     });
-
+  
     if (!result.canceled && result.assets.length > 0) {
-      const newImageUris = result.assets.map(asset => asset.uri); // Extract URIs of selected images
-      setWardrobeItems((prevItems) => ({
-        ...prevItems,
-        [activeTab]: [...prevItems[activeTab], ...newImageUris], // Add all selected image URIs
-      }));
+      const formData = new FormData();
+      result.assets.forEach((asset, index) => {
+        formData.append('images', {
+          uri: asset.uri,
+          name: `image_${index}.jpg`,
+          type: 'image/jpeg',
+        });
+      });
+  
+      try {
+        const response = await fetch('http://192.168.2.22:5001/process', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+  
+        const data = await response.json();
+  
+        if (response.ok) {
+          const { tops, bottoms } = data;
+  
+          // Update state with categorized images
+          setWardrobeItems((prevItems) => ({
+            ...prevItems,
+            tops: [...prevItems.tops, ...tops],
+            bottoms: [...prevItems.bottoms, ...bottoms],
+          }));
+        } else {
+          Alert.alert('Error', data.error || 'Failed to process images');
+        }
+      } catch (error) {
+        console.error('Error uploading images:', error);
+        Alert.alert('Error', 'Failed to connect to the server');
+      }
     }
   };
 
@@ -101,9 +131,7 @@ export default function Wardrobe() {
 
   return (
     <ScrollView 
-      contentContainerStyle={{ alignItems: 'center', paddingBottom: 150 }} className="p-4 bg-bg_color flex-1" 
-      keyboardShouldPersistTaps="handled"
-      scrollEnabled={true}>
+      contentContainerStyle={{ alignItems: 'center', paddingBottom: 150 }} className="p-4 bg-bg_color flex-1">
       {/* Your Wardrobe Section */}
       <View className="w-full p-5 mb-6 bg-[#F7F8EF] rounded-[10px] shadow">
         <Text className="text-[22px] font-b_bold mb-4">Your Wardrobe</Text>
@@ -130,7 +158,7 @@ export default function Wardrobe() {
           {displayedItems.map((item, index) => (
             <TouchableOpacity
               key={index}
-              className="bg-[#8D6E63] rounded-lg mb-4 w-[48%] overflow-hidden relative"
+              className="bg-[#6F4A4A] rounded-[10px] mb-4 w-[110px] h-[160px] overflow-hidden relative justify-center" 
               onPress={() => toggleDeleteButton(index)} // Toggle the visibility of the delete button
             >
               <Image
