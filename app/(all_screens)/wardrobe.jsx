@@ -7,7 +7,7 @@ import { useWardrobe } from '../WardrobeContext'; // Ensure this path is correct
 
 const Tab = ({ label, isActive, onPress }) => (
   <TouchableOpacity
-    className={`px-4 py-2 rounded h-[40px] ${isActive ? 'bg-bg_color' : 'bg-transparent'}`}
+    className={`px-4 py-2 rounded h-[36px] ${isActive ? 'bg-bg_color' : 'bg-transparent'}`}
     onPress={onPress}
   >
     <Text className={`text-[14px] ${isActive ? 'font-b_bold' : 'font-b_regular'}`}>{label}</Text>

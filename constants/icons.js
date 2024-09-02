@@ -16,6 +16,7 @@ import squiggly_line from "../assets/icons/squiggly_line.png"
 import clothes from "../assets/icons/clothes.png"
 import history from "../assets/icons/history.png"
 import clock from "../assets/icons/clock.png"
+import bar from "../assets/icons/bar.png"
 
 export default {
   again,
@@ -35,5 +36,6 @@ export default {
   squiggly_line,
   clothes,
   history,
-  clock
+  clock,
+  bar
 };

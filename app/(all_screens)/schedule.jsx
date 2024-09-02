@@ -69,7 +69,7 @@ const Schedule = () => {
 
       const classification = data.choices[0]?.message?.content?.trim();
       console.log('Classification:', classification);
-      
+
       if (!classification) {
         console.error('Classification result is undefined');
         return;
@@ -98,7 +98,7 @@ const Schedule = () => {
             borderWidth: 1,
             borderColor: '#d1d8e0',
             height: 350,
-            width: 400,
+            width: 375,
             borderRadius: 10,
             paddingTop: 18,
           }}
@@ -108,7 +108,7 @@ const Schedule = () => {
             textSectionTitleColor: '#cbcdb6',
             selectedDayBackgroundColor: '#ED3352',
             selectedDayTextColor: '#FEFFF5',
-            todayTextColor: '#00aeff',
+            todayTextColor: '#ff003c',
             dayTextColor: '#2d4150',
             textDisabledColor: '#cbcdb6',
           }}
@@ -118,25 +118,34 @@ const Schedule = () => {
           <Text className="text-bg_color text-center font-b_semibold text-[18px]">Sync with Google Calendar</Text>
         </TouchableOpacity>
 
-        <View className="bg-[#F7F8EF] w-11/12 rounded-[10px] p-3 mt-12">
-
-          <Text className="text-[20px] font-b_bold ml-2 mt-2">
+        <View className="bg-[#F3E8D2] w-11/12 rounded-[10px] p-3 mt-12 shadow">
+          
+          <Text className="text-[22px] font-b_bold ml-2 mt-2 mb-4">
             Today's Events
           </Text>
 
+          <ScrollView className="max-h-[30vh]" indicatorStyle="white">
           {events.map((event, index) => (
-            <View key={index} className="m-4 p-5 bg-red-100 rounded-[10px] shadow">
-              <Text className="font-b_semibold text-[18px] mb-4 text-red-800">{event.summary}</Text>
-              <View className="flex-row items-center">
-                <Image
-                  source={icons.clock}
-                  className="h-[20px] w-[20px] mr-3"
-                />
-                <Text className="text-[16px] text-red-600">{`${event.start} - ${event.end}`}</Text>
-              </View>
-            </View>
-          ))}
+              <View key={index} className="relative mr-2 ml-2 mb-2 mt-3 p-5 bg-[#F7F8EF] rounded-[10px] shadow-md">
 
+                <View className="absolute left-6 top-5 bottom-5 w-[6px] bg-red-500 rounded-full h-[60px]" />
+
+                <View className="ml-8">
+                    <Text className="font-b_semibold text-[18px] text-text_color mb-1">
+                      {event.summary}
+                    </Text>
+                    <View className="flex-row items-center">
+                      <Image
+                        source={icons.clock}
+                        className="h-[24px] w-[24px] mr-2"
+                      />
+                      <Text className="text-[18px] text-red_two font-b_regular">{`${event.start} - ${event.end}`}</Text>
+                    </View>
+                </View>
+
+              </View>
+        ))}
+        </ScrollView>   
         </View>
         
     </ScrollView>
