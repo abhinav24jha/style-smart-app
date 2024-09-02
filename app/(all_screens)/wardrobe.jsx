@@ -176,30 +176,30 @@ export default function Wardrobe() {
       </View>
 
       {/* Wardrobe Insights Section */}
-      <View className="w-full p-4 bg-[#f8c374] rounded-[10px] shadow-2xl">
+      <View className="w-full p-4 bg-[#F7F8EF] rounded-[10px] shadow">
         <Text className="text-[22px] font-b_bold mb-3">Wardrobe Insights</Text>
         <View className="flex-row justify-between">
           <View className="bg-[#F3E8D2] flex-1 mr-4 rounded-[10px] w-[158px] h-[115px] mb-2">
-            <View className="ml-5 mt-3">
+            <View className="ml-5 mt-4">
               <Image
                 source={icons.trending_up}
                 className="w-[24px] h-[24px] mb-1"
               />
               <Text className="font-b_semibold text-[18px]">Most Worn</Text>
-              <Text className="text-[14px] font-b_regular">Black T-shirt</Text>
-              <Text className="text-[14px] font-b_regular mt-[-4px]">(15 times)</Text>
+              <Text className="text-[14px] font-b_regular">Use the App More!</Text>
+              {/* <Text className="text-[14px] font-b_regular mt-[-4px]">(15 times)</Text> */}
             </View>
           </View>
 
           <View className="bg-[#F3E8D2] flex-1 mr-2 rounded-[10px] w-[158px] h-[115px] mb-2">
-            <View className="ml-5 mt-3">
+            <View className="ml-5 mt-4">
               <Image
                 source={icons.bar_graph}
                 className="w-[24px] h-[24px] mb-1"
               />
               <Text className="font-b_semibold text-[18px]">Least Used</Text>
-              <Text className="text-[14px] font-b_regular">Blue Formal Shirt</Text>
-              <Text className="text-[14px] font-b_regular mt-[-4px]">(1 time)</Text>
+              <Text className="text-[14px] font-b_regular">Use the App More!</Text>
+              {/* <Text className="text-[14px] font-b_regular mt-[-4px]">(1 time)</Text> */}
             </View>
           </View>
         </View>
