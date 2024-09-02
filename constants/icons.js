@@ -15,6 +15,7 @@ import wind from "../assets/icons/wind.png";
 import squiggly_line from "../assets/icons/squiggly_line.png"
 import clothes from "../assets/icons/clothes.png"
 import history from "../assets/icons/history.png"
+import clock from "../assets/icons/clock.png"
 
 export default {
   again,
@@ -34,4 +35,5 @@ export default {
   squiggly_line,
   clothes,
   history,
+  clock
 };
