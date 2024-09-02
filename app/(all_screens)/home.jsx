@@ -12,6 +12,7 @@ const Home = () => {
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(true);
   const [recommendation, setRecommendation] = useState(null); // State to hold the outfit recommendation
+  const [currentRecommendationIndex, setCurrentRecommendationIndex] = useState(0); // Track current outfit index
   const { wardrobeItems } = useWardrobe(); // Fetch wardrobe items from context
 
   // Function to fetch weather data
@@ -69,8 +70,35 @@ const Home = () => {
 
       const data = await response.json();
       setRecommendation(data);
+      setCurrentRecommendationIndex(0); // Reset index on new fetch
     } catch (error) {
       console.error('Error fetching recommendation:', error);
+    }
+  };
+
+  // Function to fetch the next outfit recommendation
+  const fetchNextRecommendation = async () => {
+    try {
+      const response = await fetch('http://192.168.2.22:5002/next_recommendation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          current_index: currentRecommendationIndex, // Pass the current index
+        }),
+      });
+
+      if (!response.ok) {
+        console.error('No more recommendations available');
+        return;
+      }
+
+      const data = await response.json();
+      setRecommendation(data);
+      setCurrentRecommendationIndex(data.next_index); // Update to the next index
+    } catch (error) {
+      console.error('Error fetching next recommendation:', error);
     }
   };
 
@@ -163,7 +191,7 @@ const Home = () => {
           <StyledButton className="mt-[22px]">
             <Image source={icons.thumbs_up} className="w-[33px] h-[33px]" />
           </StyledButton>
-          <StyledButton className="mt-[22px]">
+          <StyledButton className="mt-[22px]" onPress={fetchNextRecommendation}>
             <Image source={icons.again} className="w-[33px] h-[33px]" />
           </StyledButton>
           <StyledButton className="mt-[22px]">
