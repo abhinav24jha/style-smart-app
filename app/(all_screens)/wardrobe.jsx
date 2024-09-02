@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, ScrollView, Image, Alert } from 'react-na
 import * as ImagePicker from 'expo-image-picker';
 import { AntDesign } from '@expo/vector-icons'; // For the delete icon
 import { icons } from '../../constants';
+import { useWardrobe } from '../WardrobeContext'; // Ensure this path is correct
 
 const Tab = ({ label, isActive, onPress }) => (
   <TouchableOpacity
@@ -14,16 +15,9 @@ const Tab = ({ label, isActive, onPress }) => (
 );
 
 export default function Wardrobe() {
+  const { wardrobeItems, addClothes, removeClothes } = useWardrobe(); // Use context state and functions
   const [activeTab, setActiveTab] = useState('tops');
-  const [wardrobeItems, setWardrobeItems] = useState({
-    tops: [],
-    bottoms: [],
-    accessories: [],
-  });
-
-  // State to track visible delete button
   const [visibleDeleteButtonIndex, setVisibleDeleteButtonIndex] = useState(null); 
-  // State to track current page
   const [currentPage, setCurrentPage] = useState(0); 
 
   const itemsPerPage = 6; // Number of items per page
@@ -65,13 +59,8 @@ export default function Wardrobe() {
   
         if (response.ok) {
           const { tops, bottoms } = data;
-  
-          // Update state with categorized images
-          setWardrobeItems((prevItems) => ({
-            ...prevItems,
-            tops: [...prevItems.tops, ...tops],
-            bottoms: [...prevItems.bottoms, ...bottoms],
-          }));
+          addClothes('tops', tops); // Use context to add tops
+          addClothes('bottoms', bottoms); // Use context to add bottoms
         } else {
           Alert.alert('Error', data.error || 'Failed to process images');
         }
@@ -83,21 +72,7 @@ export default function Wardrobe() {
   };
 
   const handleRemoveItem = (index) => {
-    setWardrobeItems((prevItems) => {
-      const updatedItems = prevItems[activeTab].filter((_, i) => i !== index);
-      // Check if current page is still valid after removal
-      if (currentPage > 0 && updatedItems.length <= currentPage * itemsPerPage) {
-        setCurrentPage(currentPage - 1); // Go to previous page if current one becomes invalid
-      }
-      // Reset currentPage if no items remain
-      if (updatedItems.length === 0) {
-        setCurrentPage(0);
-      }
-      return {
-        ...prevItems,
-        [activeTab]: updatedItems,
-      };
-    });
+    removeClothes(activeTab, index); // Use context function to remove items
     setVisibleDeleteButtonIndex(null); // Hide the delete button after removing the item
   };
 
@@ -142,16 +117,14 @@ export default function Wardrobe() {
             <Tab label="Tops" isActive={activeTab === 'tops'} onPress={() => setActiveTab('tops')} />
           </View>
 
-          
           <View className="ml-2">
             <Tab label="Bottoms" isActive={activeTab === 'bottoms'} onPress={() => setActiveTab('bottoms')} />
           </View>
-          
 
           <View className="mr-2">
             <Tab label="Accessories" isActive={activeTab === 'accessories'} onPress={() => setActiveTab('accessories')} />
           </View>
-          
+
         </View>
 
         <View className="flex-row flex-wrap justify-between mb-6">
@@ -206,7 +179,6 @@ export default function Wardrobe() {
       <View className="w-full p-4 bg-[#f8c374] rounded-[10px] shadow-2xl">
         <Text className="text-[22px] font-b_bold mb-3">Wardrobe Insights</Text>
         <View className="flex-row justify-between">
-
           <View className="bg-[#F3E8D2] flex-1 mr-4 rounded-[10px] w-[158px] h-[115px] mb-2">
             <View className="ml-5 mt-3">
               <Image
@@ -230,9 +202,7 @@ export default function Wardrobe() {
               <Text className="text-[14px] font-b_regular mt-[-4px]">(1 time)</Text>
             </View>
           </View>
-
         </View>
-
       </View>
     </ScrollView>
   );
