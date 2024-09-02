@@ -4,6 +4,7 @@ import { styled } from 'nativewind';
 import { icons } from "../../constants";
 import { getWeatherData } from '../weather';
 import { useWardrobe } from '../WardrobeContext'; // Ensure correct import path
+import { useSchedule } from '../ScheduleContext';
 
 // Styled button using nativewind
 const StyledButton = styled(TouchableOpacity);
@@ -14,6 +15,8 @@ const Home = () => {
   const [recommendation, setRecommendation] = useState(null); // State to hold the outfit recommendation
   const [currentRecommendationIndex, setCurrentRecommendationIndex] = useState(0); // Track current outfit index
   const { wardrobeItems } = useWardrobe(); // Fetch wardrobe items from context
+  const { scheduleLabel, isSynced } = useSchedule(); // Fetch schedule label and sync status from context
+
 
   // Function to fetch weather data
   const fetchWeather = async () => {
@@ -37,17 +40,25 @@ const Home = () => {
     return "Mild"; // Default label
   };
 
+
   // Function to fetch outfit recommendation
   const fetchRecommendation = async () => {
     // Check if wardrobe items exist before making API call
     if (wardrobeItems.tops.length === 0 || wardrobeItems.bottoms.length === 0) {
+      console.warn('No wardrobe items available for recommendation.');
       return; // Exit if no wardrobe items are available
     }
 
-    // Hardcoded schedule label as per your current requirement
-    const schedule = "Casual"; 
     // Classify weather based on temperature
     const weatherLabel = classifyWeather(weather.temperature);  
+
+    console.log('Weather Label:', weatherLabel); // Log weather label
+    console.log('Schedule Label:', scheduleLabel); // Log schedule label
+
+    if (!weatherLabel || !scheduleLabel) {
+      console.error('Weather and schedule labels are required but not available.');
+      return;
+    }
 
     try {
       const response = await fetch('http://192.168.2.22:5002/recommend', {
@@ -59,12 +70,14 @@ const Home = () => {
           tops: wardrobeItems.tops,
           bottoms: wardrobeItems.bottoms,
           weather: weatherLabel,
-          schedule,
+          schedule: scheduleLabel,
         }),
       });
 
       if (!response.ok) {
-        console.error('Failed to fetch recommendation:', response.statusText);
+        // Attempt to parse error message from the response body
+        const errorDetails = await response.json().catch(() => ({})); // Gracefully handle parsing errors
+        console.error('Failed to fetch recommendation:', response.status, response.statusText, errorDetails);
         return;
       }
 
@@ -114,11 +127,11 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    // Fetch outfit recommendation whenever wardrobe items or weather are updated
-    if (weather) {
+    // Only fetch recommendations if both weather and schedule label are set
+    if (weather && isSynced && scheduleLabel) {
       fetchRecommendation();
     }
-  }, [weather, wardrobeItems]);
+  }, [weather, wardrobeItems, isSynced, scheduleLabel]); // Watch for scheduleLabel changes as well
 
   if (loading) {
     return <ActivityIndicator size="large" color="#2222d7" />;

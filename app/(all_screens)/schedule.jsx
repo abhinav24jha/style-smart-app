@@ -3,22 +3,84 @@ import React, { useState } from 'react'
 import { Calendar } from 'react-native-calendars';
 import axios from 'axios';
 import { icons } from '../../constants';
+import { useSchedule } from '../ScheduleContext'; // Import the context
 
 const Schedule = () => {
 
   const [selected, setSelected] = useState('');
   const [events, setEvents] = useState([]);
+  const { setScheduleLabel, setIsSynced } = useSchedule();
 
   const fetchEvents = async () => {
     try {
       const response = await axios.get('http://127.0.0.1:5000/events');
       setEvents(response.data.events);
       Alert.alert('Success', 'Events fetched successfully!');
+
+      // Classify schedule after fetching events
+      classifySchedule(response.data.events);
+      
+      // Set sync status to true
+      setIsSynced(true);
     } catch (error) {
       console.error(error);
       Alert.alert('Error', 'Failed to fetch events');
     }
   };
+
+  const classifySchedule = async (events) => {
+    try {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer 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`, // Use your OpenAI API key
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [
+            {
+              role: "system",
+              content: "Classify the following schedule into one of these labels: Formal, Casual, Sporty, Outdoor, Relaxed. You need to tell me a single label, from the labels I've provided according to the events in the schedule provided."
+            },
+            {
+              role: "user",
+              content: `Here are the events: ${events.map(event => `${event.summary} from ${event.start} to ${event.end}`).join(", ")}`
+            }
+          ],
+          temperature: 0.5,
+        }),
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('OpenAI API responded with error:', errorData);
+        return;
+      }
+
+      const data = await response.json();
+      console.log('OpenAI API response:', data); // Debugging line
+
+      // Additional check to ensure data is not undefined
+      if (!data || !data.choices || !data.choices.length) {
+        console.error('Invalid response from OpenAI API', data);
+        return;
+      }
+
+      const classification = data.choices[0]?.message?.content?.trim();
+      console.log('Classification:', classification);
+      
+      if (!classification) {
+        console.error('Classification result is undefined');
+        return;
+      }
+
+      setScheduleLabel(classification); // Update the global schedule label state
+    } catch (error) {
+      console.error('Error classifying schedule:', error);
+    }
+  }
+
 
 
   return (
