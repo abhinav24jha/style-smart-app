@@ -34,7 +34,7 @@ const Schedule = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer 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`, // Use your OpenAI API key
+          'Authorization': `Bearer , // Use your OpenAI API key
         },
         body: JSON.stringify({
           model: "gpt-4o-mini",

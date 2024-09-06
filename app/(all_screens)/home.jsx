@@ -172,18 +172,18 @@ const Home = () => {
         <Text className="text-[22px] font-bold mb-5">Today's Outfit Recommendation</Text>
         {recommendation ? (
           <View className="flex-row justify-between mb-4">
-            <View className="bg-[#6F4A4A] rounded-[10px] w-[164px] h-[190px] mt-[10px] justify-center">
+            <View className="bg-[#6F4A4A] rounded-[10px] w-[164px] h-[190px] mt-[10px] justify-center overflow-hidden">
               <Image
                 source={{ uri: recommendation.recommended_upper_image }}
-                className="w-full h-full rounded-lg"
-                resizeMode="cover"
+                className="w-full h-full rounded-lg mt-8"
+                resizeMode="contain"
               />
             </View>
-            <View className="bg-[#6F4A4A] rounded-[10px] w-[164px] h-[190px] mt-[10px] justify-center">
+            <View className="bg-[#6F4A4A] rounded-[10px] w-[164px] h-[190px] mt-[10px] justify-center overflow-hidden">
               <Image
                 source={{ uri: recommendation.recommended_lower_image }}
-                className="w-full h-full rounded-lg mt-[-60]"
-                resizeMode="cover"
+                className="w-full h-full rounded-lg mt-[-50px]"
+                resizeMode="contain"
               />
             </View>
           </View>
