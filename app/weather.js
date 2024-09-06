@@ -1,6 +1,6 @@
 export const getWeatherData = async (location) => {
     try {
-      const apiKey = 'a3cdbf3daaea992779c94bf26500d747'
+      const apiKey = ''
 
       const response = await fetch(
         `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=${apiKey}`
